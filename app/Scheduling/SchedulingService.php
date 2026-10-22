@@ -228,6 +228,8 @@ class SchedulingService
         $appointment->update([
             'status' => Appointment::STATUS_CANCELLED,
             'cancelled_at' => now(),
+            // Free the key so rebooking this slot in the same call books afresh.
+            'idempotency_key' => null,
         ]);
 
         return $appointment;
@@ -250,6 +252,7 @@ class SchedulingService
                 'starts_at' => $newStart,
                 'ends_at' => $newStart->addMinutes($minutes),
                 'reminder_sent_at' => null,
+                'idempotency_key' => null,
             ]);
 
             return $appointment;

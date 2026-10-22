@@ -57,6 +57,15 @@ class WebhookTest extends TestCase
         $this->assertStringNotContainsString('5550123', $stored);
     }
 
+    public function test_timestamps_keep_the_right_instant()
+    {
+        $this->retellPost('/retell/webhook', $this->call_payload('call_ended', ['end_timestamp' => 1_793_000_090_000]));
+
+        $conversation = Conversation::sole();
+        $this->assertSame(1_793_000_000_000, $conversation->started_at->getTimestampMs());
+        $this->assertSame(1_793_000_090_000, $conversation->ended_at->getTimestampMs());
+    }
+
     public function test_transfers_are_flagged()
     {
         $this->retellPost('/retell/webhook', $this->call_payload('call_ended', ['disconnection_reason' => 'call_transfer']));

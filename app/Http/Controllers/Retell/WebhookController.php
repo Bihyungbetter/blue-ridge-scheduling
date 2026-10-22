@@ -34,8 +34,10 @@ class WebhookController extends Controller
             'direction' => $data['direction'] ?? null,
             'disconnection_reason' => $data['disconnection_reason'] ?? null,
             'duration_ms' => $data['duration_ms'] ?? null,
-            'started_at' => isset($data['start_timestamp']) ? Carbon::createFromTimestampMs($data['start_timestamp']) : null,
-            'ended_at' => isset($data['end_timestamp']) ? Carbon::createFromTimestampMs($data['end_timestamp']) : null,
+            // Carbon 3 defaults to UTC here, and Eloquent stores wall-clock time
+            // without converting, so pin the app timezone.
+            'started_at' => isset($data['start_timestamp']) ? Carbon::createFromTimestampMs($data['start_timestamp'], config('app.timezone')) : null,
+            'ended_at' => isset($data['end_timestamp']) ? Carbon::createFromTimestampMs($data['end_timestamp'], config('app.timezone')) : null,
             'summary' => $analysis['call_summary'] ?? $analysis['chat_summary'] ?? null,
             'user_sentiment' => $analysis['user_sentiment'] ?? null,
             'successful' => $analysis['call_successful'] ?? $analysis['chat_successful'] ?? null,

@@ -7,6 +7,8 @@ use App\Models\AuditLog;
 use App\Models\Patient;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Tests\Concerns\SendsRetellRequests;
 use Tests\TestCase;
 
@@ -136,6 +138,31 @@ class FunctionCallTest extends TestCase
         ]);
     }
 
+    public function test_rebooking_a_cancelled_slot_in_the_same_call_creates_a_new_appointment()
+    {
+        $this->verify();
+        $args = ['department' => 'primary_care', 'appointment_type' => 'follow_up', 'start_time' => '2026-10-29T09:00'];
+
+        $first = $this->callFunction('book_appointment', $args)->json('appointment_id');
+        $this->callFunction('cancel_appointment', ['appointment_id' => $first])->assertJson(['ok' => true]);
+        $second = $this->callFunction('book_appointment', $args)->assertJson(['ok' => true])->json('appointment_id');
+
+        $this->assertNotSame($first, $second);
+        $this->assertSame(Appointment::STATUS_SCHEDULED, Appointment::find($second)->status);
+    }
+
+    public function test_rebooking_the_original_time_after_reschedule_creates_a_new_appointment()
+    {
+        $this->verify();
+        $args = ['department' => 'primary_care', 'appointment_type' => 'follow_up', 'start_time' => '2026-10-29T09:00'];
+
+        $first = $this->callFunction('book_appointment', $args)->json('appointment_id');
+        $this->callFunction('reschedule_appointment', ['appointment_id' => $first, 'new_start_time' => '2026-10-29T11:00'])->assertJson(['ok' => true]);
+        $this->callFunction('book_appointment', $args)->assertJson(['ok' => true, 'start_time' => '2026-10-29T09:00']);
+
+        $this->assertSame(2, Appointment::active()->count());
+    }
+
     public function test_failed_verification_locks_out_after_max_attempts()
     {
         foreach ([2, 1] as $remaining) {
@@ -205,6 +232,20 @@ class FunctionCallTest extends TestCase
         $this->assertSame('ai_voice', $log->actor_type);
         $this->assertSame($this->patient->id, $log->patient_id);
         $this->assertStringNotContainsString('Rivera', json_encode(AuditLog::all()->toArray()));
+    }
+
+    public function test_database_errors_do_not_log_patient_details()
+    {
+        Log::spy();
+
+        // Force a QueryException on the patient lookup, whose bindings carry PHI.
+        Schema::withoutForeignKeyConstraints(fn () => Schema::drop('patients'));
+        $this->callFunction('verify_patient', ['first_name' => 'Jordan', 'last_name' => 'Rivera', 'date_of_birth' => '1980-04-12'])
+            ->assertServerError();
+
+        Log::shouldHaveReceived('error')->withArgs(fn ($message, $context) => $message === 'Database query failed'
+            && ! str_contains(strtolower(json_encode($context)), 'rivera')
+            && ! str_contains(json_encode($context), '1980'));
     }
 
     public function test_unknown_function_and_missing_context_are_protocol_errors()

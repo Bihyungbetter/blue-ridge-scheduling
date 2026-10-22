@@ -2,10 +2,12 @@
 
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\VerifyRetellSignature;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -27,5 +29,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Query exceptions embed bound values (patient names, birth dates) in
+        // their message. Log only the error code and connection.
+        $exceptions->report(function (QueryException $e) {
+            Log::error('Database query failed', ['code' => $e->getCode(), 'connection' => $e->connectionName]);
+
+            return false;
+        });
     })->create();

@@ -102,8 +102,10 @@ is unset, they return 503.
       row lock in `SchedulingService::book`.
 - [ ] Staff SSO (Microsoft Entra ID via SAML or OIDC) instead of local passwords.
 - [ ] HTTPS only. Set `SESSION_SECURE_COOKIE=true` and `SESSION_ENCRYPT=true`.
-- [ ] `LOG_LEVEL` at warning or higher in production. Nothing logs request
-      bodies, so keep it that way.
+- [ ] `APP_DEBUG=false` and `LOG_LEVEL` at warning or higher in production.
+      Database errors are logged without their bound values (see
+      `bootstrap/app.php`), but debug mode still echoes SQL, including patient
+      details, in error responses. Nothing logs request bodies; keep it that way.
 - [ ] Retell: `data_storage_setting = everything_except_pii`, `pii_config`
       enabled, and retention days set. Webhooks still carry full transcripts,
       and this app deliberately stores only summaries.
