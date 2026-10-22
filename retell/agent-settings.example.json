@@ -1,0 +1,18 @@
+{
+    "_comment": "Recommended Retell agent settings for PHI. Field names from docs.retellai.com (Oct 2026). Tools: run `php artisan retell:tools --url=https://<public-host>` and paste general_tools into the Retell LLM.",
+    "agent": {
+        "webhook_url": "https://<public-host>/retell/webhook",
+        "webhook_events": ["call_started", "call_ended", "call_analyzed", "transfer_started"],
+        "data_storage_setting": "everything_except_pii",
+        "data_storage_retention_days": 30,
+        "opt_in_signed_url": true,
+        "pii_config": {
+            "mode": "post_call",
+            "categories": ["person_name", "address", "email", "phone_number", "date_of_birth", "medical_id", "customer_account_number", "ssn"]
+        }
+    },
+    "phone_number": {
+        "inbound_webhook_url": "https://<public-host>/retell/inbound",
+        "inbound_sms_webhook_url": "https://<public-host>/retell/inbound"
+    }
+}
