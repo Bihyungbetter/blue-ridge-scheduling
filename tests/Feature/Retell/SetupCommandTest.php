@@ -48,6 +48,7 @@ class SetupCommandTest extends TestCase
         Http::assertSent(fn (Request $r) => str_ends_with($r->url(), '/create-retell-llm')
             && $r['start_speaker'] === 'agent'
             && collect($r['general_tools'])->contains('name', 'end_call')
+            && ! str_contains($r['begin_message'] ?? 'calling', 'calling') // also used when the agent places the call
             && collect($r['general_tools'])->firstWhere('name', 'book_appointment')['url'] === 'https://demo.example.org/retell/functions');
 
         // The SMS LLM gets no call-only tools.

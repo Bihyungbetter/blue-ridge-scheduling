@@ -54,7 +54,8 @@ class RetellSetup extends Command
                 'general_prompt' => $this->prompt('voice'),
                 'general_tools' => ToolDefinitions::all("{$base}/retell/functions", 'voice'),
                 'start_speaker' => 'agent',
-                'begin_message' => 'Thank you for calling {{clinic_name}} scheduling. This is an automated assistant. How can I help you today?',
+                // Works for inbound, outbound and browser calls alike.
+                'begin_message' => 'Hi, this is the automated scheduling assistant for {{clinic_name}}. How can I help you today?',
                 'default_dynamic_variables' => $context->dynamicVariables(),
             ]);
 

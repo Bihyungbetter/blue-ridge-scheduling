@@ -7,7 +7,7 @@
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=outfit:300,400,500,600,700" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=outfit:300,400,500,600,700&display=swap" rel="stylesheet" />
 
         {{-- UNC Health's typeface. Only loaded when licensed files exist (see public/fonts/muller/README.md). --}}
         @php($mullerWeights = ['Light' => 300, 'Regular' => 400, 'Medium' => 500, 'Bold' => 700])
