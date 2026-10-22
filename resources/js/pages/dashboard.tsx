@@ -1,3 +1,4 @@
+import PageHeader from '@/components/page-header';
 import { OutcomeBadge, SourceBadge } from '@/components/scheduling-badges';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,24 +30,28 @@ interface Props {
 export default function Dashboard({ stats, schedule, recentConversations }: Props) {
     const tiles = [
         { label: 'Appointments today', value: stats.appointmentsToday, icon: CalendarCheck },
-        { label: 'Booked by AI this week', value: stats.aiBookedThisWeek, icon: Bot },
-        { label: 'AI conversations today', value: stats.conversationsToday, icon: PhoneIncoming },
-        { label: 'Transferred to staff today', value: stats.transfersToday, icon: PhoneForwarded },
+        { label: 'AI bookings this week', value: stats.aiBookedThisWeek, icon: Bot },
+        { label: 'AI conversations', value: stats.conversationsToday, icon: PhoneIncoming },
+        { label: 'Transfers to staff', value: stats.transfersToday, icon: PhoneForwarded },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    eyebrow={new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                    title="Scheduling overview"
+                />
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {tiles.map(({ label, value, icon: Icon }) => (
                         <Card key={label}>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardDescription>{label}</CardDescription>
-                                <Icon className="text-muted-foreground size-4" />
+                                <CardDescription className="eyebrow">{label}</CardDescription>
+                                <Icon className="text-primary size-5" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-3xl font-semibold tabular-nums">{value}</div>
+                                <div className="text-heading text-4xl font-bold tabular-nums">{value}</div>
                             </CardContent>
                         </Card>
                     ))}

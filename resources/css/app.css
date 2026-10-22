@@ -7,8 +7,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+    /* UNC Health uses Muller (licensed). Outfit (SIL OFL) is a close geometric stand-in. */
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        'Outfit', 'Trebuchet MS', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -48,6 +49,14 @@
     --color-chart-4: var(--chart-4);
     --color-chart-5: var(--chart-5);
 
+    --color-heading: var(--heading);
+    --color-card-border: var(--card-border);
+    --color-status: var(--status);
+    --color-status-foreground: var(--status-foreground);
+    --color-destructive-soft: var(--destructive-soft);
+    --color-destructive-soft-foreground: var(--destructive-soft-foreground);
+    --color-success: var(--success);
+
     --color-sidebar: var(--sidebar-background);
     --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar-primary: var(--sidebar-primary);
@@ -78,80 +87,103 @@
 
 :root {
     /*
-      UNC Health Blue Ridge palette, sampled from unchealthblueridge.org:
-        navy #004877 (headings, top bar)   button blue #005595
-        deep navy #003964                  Carolina blue #4b9cd3 (accent)
-        link blue #007fae                  light blue tint #e5eff6
+      UNC Health system design language, measured from unchealth.org
+      (Find a Doctor, Ways to Schedule Care, homepage), Oct 2026:
+        page #f6f9fb + pale cyan wash   headings #004263   ink/footer #002f46
+        action blue #0470ad             slate #4f6a7a (labels, input borders)
+        card border #e8eff4 (2px)       card banner #b7d7ed / #dbebf6
+        primary pill: #004263 -> #a5f2ff -> #5fd7ed gradient (see .btn-unc-primary)
+        radii: inputs 12px, cards 16px, panels 24px, buttons pill
     */
     --background: #ffffff;
-    --foreground: #13293d;
+    --foreground: #002f46;
+    --heading: #004263;
     --card: #ffffff;
-    --card-foreground: #13293d;
+    --card-foreground: #002f46;
+    --card-border: #e8eff4;
     --popover: #ffffff;
-    --popover-foreground: #13293d;
-    --primary: #005595;
+    --popover-foreground: #002f46;
+    --primary: #0470ad;
     --primary-foreground: #ffffff;
-    --secondary: #e5eff6;
-    --secondary-foreground: #004877;
-    --muted: #f2f6f9;
-    --muted-foreground: #556b7d;
-    --accent: #e5eff6;
-    --accent-foreground: #004877;
-    --destructive: #c0392b;
+    --secondary: #e8eff4;
+    --secondary-foreground: #004263;
+    --muted: #f6f9fb;
+    --muted-foreground: #4f6a7a;
+    --accent: #e9f1f8;
+    --accent-foreground: #004263;
+    --status: #dbebf6;
+    --status-foreground: #004263;
+    --success: #1f9d55;
+    --destructive: #b42318;
     --destructive-foreground: #ffffff;
-    --border: #d7e3ec;
-    --input: #c4d5e2;
-    --ring: #4b9cd3;
-    --chart-1: #004877;
-    --chart-2: #4b9cd3;
-    --chart-3: #007fae;
-    --chart-4: #8fc1e3;
-    --chart-5: #556b7d;
-    --radius: 0.5rem;
-    /* Navy frame with white text, like the site's top bar. */
-    --sidebar-background: #004877;
-    --sidebar-foreground: #e5eff6;
-    --sidebar-primary: #ffffff;
-    --sidebar-primary-foreground: #004877;
-    --sidebar-accent: #0b5d92;
-    --sidebar-accent-foreground: #ffffff;
-    --sidebar-border: #1a5e8c;
-    --sidebar-ring: #4b9cd3;
+    --destructive-soft: #fdecea;
+    --destructive-soft-foreground: #9b1c13;
+    --border: #dbe5ec;
+    --input: #4f6a7a;
+    --ring: #0470ad;
+    --chart-1: #004263;
+    --chart-2: #0470ad;
+    --chart-3: #5fd7ed;
+    --chart-4: #b7d7ed;
+    --chart-5: #4f6a7a;
+    --radius: 0.75rem;
+    --backdrop: #f6f9fb;
+    --backdrop-wash-1: rgba(165, 242, 255, 0.45);
+    --backdrop-wash-2: rgba(246, 244, 210, 0.55);
+    --sidebar-background: #f6f9fb;
+    --sidebar-foreground: #002f46;
+    --sidebar-primary: #004263;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #ffffff;
+    --sidebar-accent-foreground: #0470ad;
+    --sidebar-border: #dbe5ec;
+    --sidebar-ring: #0470ad;
 }
 
 .dark {
-    --background: #0a1824;
-    --foreground: #e6eef5;
-    --card: #0f2131;
-    --card-foreground: #e6eef5;
-    --popover: #0f2131;
-    --popover-foreground: #e6eef5;
-    --primary: #4b9cd3;
-    --primary-foreground: #04121d;
-    --secondary: #16324a;
-    --secondary-foreground: #e6eef5;
-    --muted: #12283a;
-    --muted-foreground: #93a9bc;
-    --accent: #16324a;
-    --accent-foreground: #e6eef5;
-    --destructive: #e05a4c;
-    --destructive-foreground: #ffffff;
-    --border: #1e3a52;
-    --input: #24445f;
-    --ring: #4b9cd3;
-    --chart-1: #4b9cd3;
-    --chart-2: #8fc1e3;
-    --chart-3: #2b84bf;
-    --chart-4: #c9e1f2;
-    --chart-5: #93a9bc;
-    --sidebar-background: #062b45;
-    --sidebar-foreground: #c9dceb;
-    --sidebar-primary: #4b9cd3;
-    --sidebar-primary-foreground: #04121d;
-    --sidebar-accent: #0d3d60;
-    --sidebar-accent-foreground: #ffffff;
-    --sidebar-border: #12466d;
-    --sidebar-ring: #4b9cd3;
+    /* Derived from the unchealth.org footer navy (#002f46 / #001f2e). */
+    --background: #062636;
+    --foreground: #e3eef5;
+    --heading: #e3f4fb;
+    --card: #062636;
+    --card-foreground: #e3eef5;
+    --card-border: #12384c;
+    --popover: #0a2d40;
+    --popover-foreground: #e3eef5;
+    --primary: #5fd7ed;
+    --primary-foreground: #002f46;
+    --secondary: #12364a;
+    --secondary-foreground: #e3eef5;
+    --muted: #0a2d40;
+    --muted-foreground: #9db4c3;
+    --accent: #12364a;
+    --accent-foreground: #e3eef5;
+    --status: #12364a;
+    --status-foreground: #a5f2ff;
+    --success: #3ccf7d;
+    --destructive: #f2675a;
+    --destructive-foreground: #002f46;
+    --destructive-soft: #3a1c1f;
+    --destructive-soft-foreground: #ffb4ab;
+    --border: #17405a;
+    --input: #6b8798;
+    --ring: #5fd7ed;
+    --chart-1: #5fd7ed;
+    --chart-2: #a5f2ff;
+    --chart-3: #b7d7ed;
+    --chart-4: #0470ad;
+    --chart-5: #9db4c3;
+    --backdrop: #001f2e;
+    --backdrop-wash-1: rgba(4, 112, 173, 0.25);
+    --backdrop-wash-2: rgba(95, 215, 237, 0.08);
+    --sidebar-background: #001f2e;
+    --sidebar-foreground: #c9dce8;
+    --sidebar-primary: #5fd7ed;
+    --sidebar-primary-foreground: #002f46;
+    --sidebar-accent: #062636;
+    --sidebar-accent-foreground: #5fd7ed;
+    --sidebar-border: #12384c;
+    --sidebar-ring: #5fd7ed;
 }
 
 @layer base {
@@ -160,6 +192,60 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply text-foreground;
+        /* UNC Health's pale page wash, recreated in CSS (their SVG is not reused). */
+        background-color: var(--backdrop);
+        background-image:
+            radial-gradient(ellipse 60% 50% at 0% 0%, var(--backdrop-wash-1), transparent 70%),
+            radial-gradient(ellipse 50% 40% at 100% 0%, var(--backdrop-wash-2), transparent 70%);
+        background-attachment: fixed;
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: var(--heading);
+        letter-spacing: -0.015em;
+    }
+}
+
+@layer components {
+    /* Uppercase slate label, as on unchealth.org ("5191 RESULTS FOUND"). */
+    .eyebrow {
+        @apply text-muted-foreground text-xs font-bold tracking-[0.05em] uppercase;
+    }
+
+    /*
+      UNC Health primary pill: rests on the cyan end of the gradient and
+      slides to navy on hover (values measured from unchealth.org).
+      Use for the one main action on a page; everything else is outline.
+    */
+    .btn-unc-primary {
+        color: #002f46;
+        background-image: linear-gradient(135deg, #004263, #004263 40%, #a5f2ff 60%, #5fd7ed);
+        background-size: 320% 100%;
+        background-position: 100% 0;
+        transition:
+            color 0.15s cubic-bezier(0.5, 0, 0.5, 1),
+            background-position 0.6s cubic-bezier(0, 0.25, 0.25, 1);
+    }
+
+    .btn-unc-primary:not(:disabled):hover,
+    .btn-unc-primary:not(:disabled):focus-visible {
+        color: #ffffff;
+        background-position: 0 0;
+    }
+
+    /* The navy half would vanish on a navy page, so dark mode uses solid cyan. */
+    .dark .btn-unc-primary {
+        background-image: none;
+        background-color: #5fd7ed;
+        color: #002f46;
+    }
+
+    .dark .btn-unc-primary:not(:disabled):hover,
+    .dark .btn-unc-primary:not(:disabled):focus-visible {
+        background-color: #a5f2ff;
+        color: #002f46;
     }
 }
