@@ -1,4 +1,4 @@
-import AppLogoIcon from '@/components/app-logo-icon';
+import UncHealthBlueRidgeLogo from '@/components/unc-logo';
 import { Link } from '@inertiajs/react';
 
 interface AuthLayoutProps {
@@ -16,10 +16,8 @@ export default function AuthSimpleLayout({ children, title, description }: AuthL
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col items-center gap-4">
                         <Link href={route('home')} className="flex flex-col items-center gap-3 font-medium">
-                            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex size-12 items-center justify-center rounded-xl">
-                                <AppLogoIcon className="size-7" />
-                            </div>
-                            <span className="eyebrow">Blue Ridge Scheduling</span>
+                            <UncHealthBlueRidgeLogo className="w-32" />
+                            <span className="eyebrow">Scheduling · Patient access</span>
                         </Link>
 
                         <div className="space-y-2 text-center">

@@ -7,9 +7,13 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    /* UNC Health uses Muller (licensed). Outfit (SIL OFL) is a close geometric stand-in. */
+    /*
+      Mirrors UNC Health's stack (Muller, "Trebuchet MS", ...). Muller is a
+      licensed Fontfabric face: it loads only when licensed files are placed in
+      public/fonts/muller (see app.blade.php); until then Outfit (OFL) stands in.
+    */
     --font-sans:
-        'Outfit', 'Trebuchet MS', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        'Muller', 'Outfit', 'Trebuchet MS', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -138,6 +142,9 @@
     --sidebar-accent-foreground: #0470ad;
     --sidebar-border: #dbe5ec;
     --sidebar-ring: #0470ad;
+    /* Logo artwork colours (#054c77 / #5aa3d2 in the official SVG). */
+    --logo-primary: #054c77;
+    --logo-accent: #5aa3d2;
 }
 
 .dark {
@@ -184,6 +191,8 @@
     --sidebar-accent-foreground: #5fd7ed;
     --sidebar-border: #12384c;
     --sidebar-ring: #5fd7ed;
+    --logo-primary: #ffffff;
+    --logo-accent: #5aa3d2;
 }
 
 @layer base {
