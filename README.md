@@ -55,22 +55,32 @@ is far faster than `/mnt/c`.
 
 ## Connecting Retell
 
-1. **Sign Retell's BAA** (free, self-serve at https://click-agreements.retellai.com)
-   before any real patient data is used.
-2. Expose the app over HTTPS. Retell can't reach `localhost`. For dev, use
-   `cloudflared tunnel --url http://localhost:8000` or ngrok.
-3. In `.env`, set `RETELL_API_KEY` to the key **with the webhook badge** (it
-   signs every request), plus `RETELL_FROM_NUMBER`, `RETELL_VOICE_AGENT_ID`,
-   `RETELL_SMS_AGENT_ID` and `SCHEDULING_TRANSFER_NUMBER`.
-4. Generate the tools and paste `general_tools` into the Retell LLM:
-   `php artisan retell:tools --url=https://<public-host>`
-5. Paste `retell/agent-prompt.md` into the agent prompt. Apply
-   `retell/agent-settings.example.json` (webhook URL, PII scrubbing, retention,
-   inbound webhooks on the phone number).
-6. Keep **"Payload: args only" OFF** on the custom functions. The app needs
+1. **Create a Retell account** at https://www.retellai.com (new accounts get
+   $10 of credit). **Sign the BAA** (free, self-serve at
+   https://click-agreements.retellai.com) before any real patient data is used.
+2. In `.env`, set `RETELL_API_KEY` to the key **with the webhook badge** (it
+   signs every request). Optionally set `SCHEDULING_TRANSFER_NUMBER`.
+3. Expose the app over HTTPS, because Retell can't reach `localhost`. For dev:
+   `cloudflared tunnel --url http://localhost:8000` (or ngrok).
+4. Create the agents. This also writes their IDs into `.env`:
+   `php artisan retell:setup --url=https://<tunnel-host> --write-env`
+   It creates the voice LLM and agent, plus the SMS LLM and chat agent, using
+   `retell/prompts/*.md`, the tools from `config/scheduling.php`, webhook URLs,
+   PII scrubbing and `everything_except_pii` storage. Re-running it updates
+   the agents in place. Pick a voice with `--voice=<voice_id>`.
+5. **Try it in the browser:** open **Test AI agent** in the app and click
+   *Start browser call*. You don't need a phone number or Retell's ID check.
+6. **To call a phone:** buy a number in the Retell dashboard ($2/month; it
+   needs a payment method, and choose Twilio as the provider if you want SMS
+   later). Set `RETELL_FROM_NUMBER`, re-run `retell:setup` to bind it, and
+   complete Retell's KYC check, which is required before any outbound call.
+   Then use *Call a phone* on the Test AI agent page.
+7. **To text a phone:** US carriers require A2P 10DLC registration for the
+   number (about 2–3 weeks; brand, campaign and SMS add-on fees apply). Once
+   it's approved, set `RETELL_SMS_ENABLED=true` and re-run `retell:setup`.
+   Retell can't send custom texts before that.
+8. Keep **"Payload: args only" OFF** on the custom functions. The app needs
    the `call` object to tie verification to the call ID.
-7. SMS needs US A2P 10DLC registration (roughly 2–3 weeks) and Retell's SMS
-   add-on on the number.
 
 Every `/retell/*` route rejects unsigned requests (401). If `RETELL_API_KEY`
 is unset, they return 503.

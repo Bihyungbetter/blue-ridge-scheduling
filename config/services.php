@@ -43,6 +43,12 @@ return [
         'from_number' => env('RETELL_FROM_NUMBER'),
         'voice_agent_id' => env('RETELL_VOICE_AGENT_ID'),
         'sms_agent_id' => env('RETELL_SMS_AGENT_ID'),
+        // Written by `php artisan retell:setup` so re-runs update instead of duplicating.
+        'llm_id' => env('RETELL_LLM_ID'),
+        'sms_llm_id' => env('RETELL_SMS_LLM_ID'),
+        // Turn on only after the number's A2P 10DLC campaign is approved.
+        'sms_enabled' => (bool) env('RETELL_SMS_ENABLED', false),
+        'voice_id' => env('RETELL_VOICE_ID', 'retell-Cimo'),
     ],
 
 ];

@@ -9,7 +9,11 @@ namespace App\Retell;
  */
 class ToolDefinitions
 {
-    public static function all(string $functionsUrl): array
+    /**
+     * @param  'voice'|'sms'  $channel  SMS agents get the scheduling tools only
+     *                                  (no hang-up or call transfer in a text chat).
+     */
+    public static function all(string $functionsUrl, string $channel = 'voice'): array
     {
         $departments = array_keys(config('scheduling.departments'));
         $types = collect(config('scheduling.departments'))
@@ -65,11 +69,16 @@ class ToolDefinitions
                 ['appointment_id', 'new_start_time'],
                 'One moment while I move that.',
             ),
-            [
-                'type' => 'end_call',
-                'name' => 'end_call',
-                'description' => 'End the call once the patient has nothing else to schedule.',
-            ],
+        ];
+
+        if ($channel === 'sms') {
+            return $tools;
+        }
+
+        $tools[] = [
+            'type' => 'end_call',
+            'name' => 'end_call',
+            'description' => 'End the call once the patient has nothing else to schedule.',
         ];
 
         if (filled($number = config('scheduling.transfer_number'))) {
