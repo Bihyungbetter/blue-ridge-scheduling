@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Retell;
 
 use App\Http\Controllers\Controller;
-use App\Retell\ToolDefinitions;
-use App\Scheduling\SchedulingService;
+use App\Retell\AgentContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -18,20 +17,12 @@ use Illuminate\Http\Request;
  */
 class InboundController extends Controller
 {
-    public function __invoke(Request $request, SchedulingService $scheduling): JsonResponse
+    public function __invoke(Request $request, AgentContext $context): JsonResponse
     {
         $key = $request->input('event') === 'chat_inbound' ? 'chat_inbound' : 'call_inbound';
 
         return response()->json([
-            $key => [
-                // Retell requires string values.
-                'dynamic_variables' => [
-                    'clinic_name' => (string) config('app.name'),
-                    'current_time' => $scheduling->spoken($scheduling->now()),
-                    'departments' => ToolDefinitions::departmentSummary(),
-                    'transfer_available' => filled(config('scheduling.transfer_number')) ? 'yes' : 'no',
-                ],
-            ],
+            $key => ['dynamic_variables' => $context->dynamicVariables()],
         ]);
     }
 }

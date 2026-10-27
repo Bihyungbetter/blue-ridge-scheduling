@@ -1,3 +1,4 @@
+import PageHeader from '@/components/page-header';
 import { OutcomeBadge } from '@/components/scheduling-badges';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -30,19 +31,32 @@ export default function ConversationsIndex({ conversations, filters }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="AI conversations" />
-            <div className="flex h-full flex-1 flex-col gap-4 p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader eyebrow="Retell AI agent" title="AI conversations" />
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <ToggleGroup
                         type="single"
                         variant="outline"
+                        className="gap-2"
                         value={filters.channel}
                         onValueChange={(channel) =>
                             channel && router.get(route('conversations.index'), { channel }, { preserveState: true, replace: true })
                         }
                     >
-                        <ToggleGroupItem value="all">All</ToggleGroupItem>
-                        <ToggleGroupItem value="voice">Calls</ToggleGroupItem>
-                        <ToggleGroupItem value="sms">Texts</ToggleGroupItem>
+                        {[
+                            ['all', 'All'],
+                            ['voice', 'Calls'],
+                            ['sms', 'Texts'],
+                        ].map(([value, label]) => (
+                            // UNC-style outlined pill chips
+                            <ToggleGroupItem
+                                key={value}
+                                value={value}
+                                className="border-primary text-primary data-[state=on]:bg-status data-[state=on]:text-status-foreground rounded-full! px-4"
+                            >
+                                {label}
+                            </ToggleGroupItem>
+                        ))}
                     </ToggleGroup>
                     <p className="text-muted-foreground text-sm">Transcripts and recordings stay in Retell; only summaries are stored here.</p>
                 </div>

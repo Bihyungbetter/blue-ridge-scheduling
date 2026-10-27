@@ -35,7 +35,7 @@ export default function CancelAppointmentDialog({ appointment }: { appointment: 
                     <InputError message={(errors as Record<string, string>).appointment} />
                     <DialogFooter className="gap-2">
                         <DialogClose asChild>
-                            <Button variant="secondary">Keep appointment</Button>
+                            <Button variant="outline">Keep appointment</Button>
                         </DialogClose>
                         <Button variant="destructive" disabled={processing} asChild>
                             <button type="submit">Cancel appointment</button>

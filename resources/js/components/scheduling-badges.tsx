@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 import { type AppointmentStatus, type BookingSource, type Conversation } from '@/types/scheduling';
 import { MessageSquare, Phone, UserRound } from 'lucide-react';
 
@@ -10,7 +11,11 @@ const statusVariant: Record<AppointmentStatus, 'default' | 'secondary' | 'destru
 };
 
 export function AppointmentStatusBadge({ status }: { status: AppointmentStatus }) {
-    return <Badge variant={statusVariant[status]}>{status.replace('_', ' ')}</Badge>;
+    return (
+        <Badge variant={statusVariant[status]} className="capitalize">
+            {status.replace('_', ' ')}
+        </Badge>
+    );
 }
 
 export function SourceBadge({ source }: { source: BookingSource }) {
@@ -18,21 +23,31 @@ export function SourceBadge({ source }: { source: BookingSource }) {
     const label = source === 'voice' ? 'AI call' : source === 'sms' ? 'AI text' : 'Staff';
 
     return (
-        <Badge variant="outline" className="gap-1 font-normal">
-            <Icon className="size-3" />
+        <span className="text-foreground inline-flex items-center gap-1.5 text-sm">
+            <Icon className="text-primary size-4" />
             {label}
-        </Badge>
+        </span>
+    );
+}
+
+// Dot + label, like "● Accepting New Patients" on UNC Health provider cards.
+function DotLabel({ dotClass, children }: { dotClass: string; children: string }) {
+    return (
+        <span className="text-foreground inline-flex items-center gap-1.5 text-sm whitespace-nowrap">
+            <span className={cn('size-2.5 rounded-full', dotClass)} />
+            {children}
+        </span>
     );
 }
 
 export function OutcomeBadge({ conversation }: { conversation: Conversation }) {
     if (conversation.transferred) {
-        return <Badge variant="secondary">Transferred</Badge>;
+        return <DotLabel dotClass="bg-primary">Transferred</DotLabel>;
     }
 
     if (conversation.successful === null) {
-        return <Badge variant="outline">{conversation.status.replace(/_/g, ' ')}</Badge>;
+        return <DotLabel dotClass="bg-muted-foreground/50">{conversation.status.replace(/_/g, ' ')}</DotLabel>;
     }
 
-    return conversation.successful ? <Badge>Resolved</Badge> : <Badge variant="destructive">Unresolved</Badge>;
+    return conversation.successful ? <DotLabel dotClass="bg-success">Resolved</DotLabel> : <DotLabel dotClass="bg-destructive">Unresolved</DotLabel>;
 }

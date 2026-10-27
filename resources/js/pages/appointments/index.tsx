@@ -1,4 +1,5 @@
 import CancelAppointmentDialog from '@/components/cancel-appointment-dialog';
+import PageHeader from '@/components/page-header';
 import { AppointmentStatusBadge, SourceBadge } from '@/components/scheduling-badges';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -37,7 +38,8 @@ export default function AppointmentsIndex({ appointments, filters, departments }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Appointments" />
-            <div className="flex h-full flex-1 flex-col gap-4 p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader eyebrow="Schedule" title="Appointments" />
                 <div className="flex flex-wrap items-end gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="date">Date</Label>
@@ -78,7 +80,7 @@ export default function AppointmentsIndex({ appointments, filters, departments }
                             </SelectContent>
                         </Select>
                     </div>
-                    <p className="text-muted-foreground ml-auto text-sm">
+                    <p className="eyebrow ml-auto pb-3">
                         {appointments.length} appointment{appointments.length === 1 ? '' : 's'}
                     </p>
                 </div>
